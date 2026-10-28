@@ -1,0 +1,180 @@
+% ============================================================
+%  Ishaq Hamza: Industry Résumé
+%  Compile with pdfLaTeX (e.g. on Overleaf).
+% ============================================================
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper,margin=0.9in,top=0.75in,bottom=0.8in]{geometry}
+\usepackage{titlesec}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\definecolor{linkblue}{RGB}{28,64,200}
+\hypersetup{
+  colorlinks=true, urlcolor=linkblue, linkcolor=linkblue,
+  pdftitle={Ishaq Hamza - Resume}, pdfauthor={Ishaq Hamza}
+}
+
+\pagestyle{plain}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+
+% ---------- Section headings: large caps with a rule underneath ----------
+\titleformat{\section}{\LARGE\raggedright}{}{0em}{}[\vspace{2pt}\titlerule]
+\titlespacing*{\section}{0pt}{16pt}{10pt}
+
+% ---------- Bullets ----------
+\setlist[itemize]{leftmargin=1.1em, labelsep=0.45em, itemsep=1.5pt, topsep=2pt, parsep=0pt, partopsep=0pt}
+
+% ---------- Entry helpers ----------
+% \entry{Title}{Right}{Subtitle (italic)}{Right subtitle}
+\newcommand{\entry}[4]{%
+  \textbf{\large #1}\hfill\textbf{#2}\par
+  \ifx\relax#3\relax\else{\itshape #3}\hfill{#4}\par\fi
+}
+
+\begin{document}
+
+% ======================= HEADER =======================
+\begin{center}
+  {\fontsize{24.88}{28}\selectfont\bfseries Ishaq Hamza}\par\vspace{5pt}
+  \href{https://www.linkedin.com/in/ishaqhamza}{\texttt{linkedin.com/in/ishaqhamza}}\qquad
+  \href{mailto:ihamza@purdue.edu}{\texttt{ihamza@purdue.edu}}
+\end{center}
+
+% ======================= OVERVIEW =======================
+\section*{OVERVIEW}
+\textbf{Operations Research PhD} student at \textbf{Purdue IE}, \textbf{Math \& Computing undergrad} at
+\textbf{Indian Institute of Science}. Working on \textbf{reinforcement learning} theory. Aiming to design
+nuanced, robust and sample-efficient learning and control algorithms for challenging problems in
+high-noise settings.
+
+% ======================= EDUCATION =======================
+\section*{EDUCATION}
+{\Large\bfseries Purdue University:} \textbf{PhD in Operations Research}\hfill\textbf{2026--30}\par
+\textbf{Advisor:} \href{https://sites.google.com/view/zaiweichen/home}{\textbf{Dr.~Zaiwei Chen}}\par
+\vspace{5pt}
+\textbf{Other PhD Offers: Georgia Tech} ISyE, \textbf{Columbia University} IEOR.\par
+\vspace{4pt}
+\textbf{Awardee} of the prestigious \emph{Dr.~W. Dale and Mrs.~Jeanne C. Compton Award} for four years of
+doctoral study, over and above standard PhD support.\par
+\vspace{4pt}
+\textbf{Research Focus:} Reinforcement Learning, Stochastic Games, Optimization Theory, Stochastic Modeling.
+
+\vspace{9pt}
+{\Large\bfseries Indian Institute of Science (IISc):} \textbf{B.Tech in Math and Computing}\hfill\textbf{2022--26}\par
+CGPA: \textbf{3.96/4}, \textbf{Rank 4}\par
+\vspace{6pt}
+{\itshape Relevant Coursework:}\par
+\textbf{On-line and Reinforcement Learning $\|$ Game Theory $\|$ Measure Theoretic Probability $\|$
+Regression and Time-Series Analysis $\|$ Stochastic Finance $\|$ Applied DS\&AI $\|$
+Renewal and Queuing Theory $\|$ Computational Optimization $\|$ Detection \& Estimation Theory $\|$
+Numerical Methods $\|$ Nonlinear Systems \& Stability $\|$ Advanced Real Analysis}
+
+% ======================= EXPERIENCE =======================
+\section*{EXPERIENCE (Undergrad)}
+\entry{Summer Research Intern}{May--August 2025}
+  {\textbf{Dr.~Zaiwei Chen, Purdue IE}\quad Optimal Single-Timescale Actor-Critic Algorithm}{}
+\begin{itemize}
+  \item Proposed two variants of the \textbf{actor-critic algorithm} with \textbf{single-timescale updates} and
+        achieved the \textbf{optimal sample complexity} in the \textbf{off-policy} setting through a tight analysis
+        under \textbf{provably minimal assumptions}.
+  \item Used advanced mathematical tools such as \textbf{Moreau envelopes}, \textbf{stochastic approximation}, and
+        \textbf{Markov chain mixing} to achieve the results. \textbf{(Published at the NeurIPS 2026 MLxOR workshop.)}
+\end{itemize}
+
+\vspace{6pt}
+\entry{Teaching Assistant}{(Undergrad Junior Year) Jan--Apr 2025}
+  {\textbf{Advanced Convex Optimization}}
+  {\textit{Dr.~Kunal N. Chaudhury, IISc EE} $|$ \href{https://sites.google.com/site/kunalnchaudhury/Teaching/aco-2025}{course webpage}}
+\begin{itemize}
+  \item Conducted \textbf{tutorials}, answered questions, and graded \textbf{assignments} for a
+        \textbf{class of PhD students}.
+  \item Covered rigorous \textbf{convex analysis} in extended-real settings and the \textbf{operator-theoretic}
+        treatment of optimization algorithms in both smooth and \textbf{non-smooth} settings, using set-valued
+        analysis for \textbf{proximal algorithms}.
+\end{itemize}
+
+% ======================= SKILLS =======================
+\section*{SKILLS}
+\textbf{\textit{Theory:}} Stochastic Approximation, Stochastic Modeling, Statistical Inference, Game Theory,
+Linear Models, Decision Trees and Neural Networks.\par
+\vspace{5pt}
+\textbf{\LaTeX, R, Python (NumPy, Pandas, PyTorch).}
+
+% ======================= PUBLICATIONS =======================
+\section*{PUBLICATIONS}
+\begin{itemize}
+  \item Achieving $\epsilon^{-2}$ Sample Complexity in Single-Loop Actor-Critic,
+        \href{https://openreview.net/forum?id=ALtp3rFOx7}{NeurIPS MLxOR 2026}, \textbf{Ishaq Hamza}, Zaiwei Chen.
+        \textbf{Undergrad Publication}, \href{https://arxiv.org/abs/2605.13639}{arXiv link}
+\end{itemize}
+
+% ======================= PROJECTS =======================
+\section*{UNDERGRADUATE COURSE PROJECTS}
+\entry{Extending Soft Actor-Critic to Multi-Agent RL}{Spring 2025}
+  {RL Course Project}{\href{https://github.com/IshaqHamza/Multi-agent-SAC}{GitHub Link}}
+\begin{itemize}
+  \item Surveyed \textbf{Entropy-Regularized RL} and \textbf{Soft Actor-Critic algorithms} in several settings.
+  \item Proposed and implemented a \textbf{novel multi-agent extension} of the algorithm, incorporating
+        \textbf{Cross-Entropy Regularization}.
+  \item Extended the analysis and proved \textbf{single-step evaluation} and \textbf{improvement theorems}.
+        Provided a \textbf{counterexample} to global optimal convergence.
+  \item Proposed \textbf{Dynamic Cross-Entropy Regularization} to escape \textbf{sub-optimal Nash equilibria} and
+        designed experiments to validate it (successfully implemented, with positive results, by the rest of the team).
+\end{itemize}
+
+\vspace{6pt}
+\entry{Game-Theoretic Market-Making and Trading}{Spring 2025}{Game Theory Course Project}{}
+\begin{itemize}
+  \item Surveyed \textbf{10+ papers} on \textbf{modeling and equilibrium analysis} of \textbf{market makers and
+        traders} in financial markets.
+  \item Surveyed \textbf{5+ papers} on \textbf{information asymmetry} and its impact on market making.
+  \item Formulated a \textbf{novel generalized model} of trading with \textbf{priced information exchange}.
+\end{itemize}
+
+\vspace{6pt}
+\entry{Automated Equity Research Analyst}{Fall 2024}
+  {Applied DS\&AI Course Project \textup{\textbf{(Team of 6)}}\textup{, Contributions:}}
+  {\href{https://github.com/Finance-Automation-Projects/finance-dashboard}{GitHub Link}}
+\begin{itemize}
+  \item Conceived the \textbf{rating-generation mechanism} and project structure for a \textbf{team of 6}.
+  \item Implemented a \textbf{self-engineered variant of the multiplicative weights algorithm} to generate ratings
+        for stocks from \textbf{aspect-based sentiment analysis scores} computed on financial news data.
+  \item Tested on both \textbf{real and geometric-Brownian-motion-simulated prices}, with \textbf{high-noise expert
+        ratings}.
+\end{itemize}
+
+\vspace{6pt}
+\entry{Financial Network Modeling}{Fall 2024}
+  {Data Analytics Course Project \textup{\textbf{(Led a team of 5)}}}
+  {\href{https://github.com/IshaqHamza/DA_Financial_networks}{GitHub Link}}
+\begin{itemize}
+  \item Researched \textbf{generative models} to study and analyze \textbf{graph community structures}.
+  \item Studied relationships in stock price movements using a \textbf{hierarchical weighted stochastic block
+        model}.
+  \item Applied the same model to \textbf{import--export data} across 200+ countries to study \textbf{trade
+        relations}, obtaining the expected results.
+\end{itemize}
+
+% ======================= AWARDS =======================
+\section*{AWARDS \& ACHIEVEMENTS}
+\begin{itemize}
+  \item \textbf{Dr.~W. Dale and Mrs.~Jeanne C. Compton Award}: four-year fellowship recipient.
+  \item \textbf{Simon Marais Mathematics Competition (SMMC) 2024}: \textbf{Global 98\textsuperscript{th}}
+        (Institute 5\textsuperscript{th}) $\|$ \href{https://www.simonmarais.org/east-division1.html}{results}
+  \item \textbf{Indian Statistical Institute Entrance Test 2022}: National \textbf{Rank 62}.
+  \item \textbf{Dr.~Kolar \& Mrs.~Girija Kodandapani Scholarship}, awarded to \textbf{one student per batch}.
+        $\|$ \href{https://odaa.iisc.ac.in/kodandapani-family-fellowship/}{odaa.iisc.ac.in}
+  \item \textbf{ITTIAM Fellowship}: two-time awardee (2024--25 and 2025--26).
+        $\|$ \href{https://odaa.iisc.ac.in/ittiam-btech-fellowship/}{odaa.iisc.ac.in}
+\end{itemize}
+
+\end{document}

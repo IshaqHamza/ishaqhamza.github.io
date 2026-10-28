@@ -1,0 +1,216 @@
+% ============================================================
+%  Ishaq Hamza: Academic Curriculum Vitae
+%  Compile with pdfLaTeX (e.g. on Overleaf).
+% ============================================================
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper,margin=1in,top=0.75in,bottom=0.8in]{geometry}
+\usepackage{titlesec}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{needspace}
+\usepackage{hyperref}
+
+\definecolor{linkblue}{RGB}{24,62,150}
+\definecolor{rulegray}{gray}{0.55}
+\definecolor{softgray}{gray}{0.35}
+\hypersetup{
+  colorlinks=true, urlcolor=linkblue, linkcolor=linkblue,
+  pdftitle={Ishaq Hamza - Curriculum Vitae}, pdfauthor={Ishaq Hamza}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+
+% ---------- Page footer ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\small\color{softgray}Ishaq Hamza \textendash{} Curriculum Vitae}
+\fancyfoot[R]{\small\color{softgray}Page \thepage\ of \pageref*{LastPage}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[R]{\small\color{softgray}Page \thepage\ of \pageref*{LastPage}}}
+
+% ---------- Section headings: small caps with a hairline rule ----------
+\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[{\color{rulegray}\vspace{1pt}\titlerule}]
+\titlespacing*{\section}{0pt}{15pt}{8pt}
+
+% ---------- Lists ----------
+\setlist[itemize]{before={\interlinepenalty=10000}, leftmargin=1.2em, labelsep=0.5em, itemsep=2pt, topsep=3pt, parsep=0pt, partopsep=0pt}
+\setlist[enumerate]{leftmargin=2.2em, itemsep=2pt, topsep=3pt, parsep=0pt}
+
+% ---------- Entry helpers ----------
+% \entry{Title}{Dates}
+\newcommand{\entry}[2]{\needspace{6\baselineskip}\textbf{#1}\hfill #2\par}
+% \sub{left (italic)}{right}
+\newcommand{\sub}[2]{{\itshape #1}\hfill{#2}\par}
+% \award{Title}{Year}{Description}
+\newcommand{\award}[3]{\item \textbf{#1}\hfill #2\\ #3}
+\newcommand{\gap}{\vspace{8pt}}
+
+\begin{document}
+
+% ======================= HEADER =======================
+\begin{center}
+  {\fontsize{25}{30}\selectfont\scshape Ishaq Hamza}\par\vspace{5pt}
+  PhD Student in Operations Research\par
+  Edwardson School of Industrial Engineering, Purdue University\par\vspace{4pt}
+  \href{mailto:ihamza@purdue.edu}{ihamza@purdue.edu}
+  \enspace$\vert$\enspace
+  \href{https://scholar.google.com/citations?user=RCmlLGgAAAAJ&hl=en}{Google Scholar}
+  \enspace$\vert$\enspace
+  \href{https://www.linkedin.com/in/ishaqhamza}{LinkedIn}
+  \enspace$\vert$\enspace
+  \href{https://github.com/IshaqHamza}{GitHub}
+\end{center}
+
+% ======================= RESEARCH INTERESTS =======================
+\section*{Research Interests}
+My research centers on reinforcement learning theory and data-driven decision-making under uncertainty.
+I design and analyze practical policy-space algorithms, and establish
+finite-sample guarantees for them under minimal and realistic assumptions, aiming for theory that gives
+practitioners real insight. More broadly, I am interested in stochastic
+approximation, stochastic games, and in developing reinforcement learning into
+a tool that reaches beyond its classical applications, assumptions, and modeling choices.
+
+% ======================= EDUCATION =======================
+\section*{Education}
+\entry{Purdue University}{2026 \textendash{} Present}
+\sub{Ph.D. in Operations Research, Edwardson School of Industrial Engineering}{}
+Advisor: \href{https://sites.google.com/view/zaiweichen/home}{Dr.~Zaiwei Chen}\par
+
+\gap
+\entry{Indian Institute of Science (IISc)}{2022 \textendash{} 2026}
+\sub{B.Tech in Math and Computing}{}
+CGPA: \textbf{3.96/4}, \textbf{Rank 4}\par
+\vspace{5pt}
+Relevant coursework:
+\begin{multicols}{2}
+\begin{itemize}[itemsep=0pt, topsep=1pt]
+  \item On-line and Reinforcement Learning
+  \item Game Theory
+  \item Measure Theoretic Probability
+  \item Regression and Time-Series Analysis
+  \item Stochastic Finance
+  \item Applied DS\&AI
+  \item Renewal and Queuing Theory
+  \item Computational Optimization
+  \item Detection \& Estimation Theory
+  \item Numerical Methods
+  \item Nonlinear Systems \& Stability
+  \item Advanced Real Analysis
+\end{itemize}
+\end{multicols}
+
+% ======================= AWARDS =======================
+\section*{Awards and Achievements}
+\begin{itemize}[itemsep=4pt]
+  \award{Dr.~W. Dale and Mrs.~Jeanne C. Compton Award, Purdue University}{2026 \textendash{} 2030}
+        {Four-year doctoral fellowship, awarded over and above standard PhD support.}
+  \award{PhD Admission Offers}{2026}
+        {Georgia Tech (ISyE) and Columbia University (IEOR).}
+  \award{ITTIAM Fellowship, IISc}{2024\textendash25, 2025\textendash26}
+        {Two-time awardee.
+        \href{https://odaa.iisc.ac.in/ittiam-btech-fellowship/}{[details]}}
+  \award{Dr.~Kolar \& Mrs.~Girija Kodandapani Scholarship, IISc}{}
+        {Awarded to one student per batch.
+        \href{https://odaa.iisc.ac.in/kodandapani-family-fellowship/}{[details]}}
+  \award{Simon Marais Mathematics Competition}{2024}
+        {Global rank 98 (5th within IISc).
+        \href{https://www.simonmarais.org/east-division1.html}{[results]}}
+  \award{Indian Statistical Institute Entrance Test}{2022}
+        {National rank 62.}
+\end{itemize}
+
+% ======================= PUBLICATIONS =======================
+\section*{Publications}
+\begin{enumerate}[label={[\arabic*]}]
+  \item Achieving $\epsilon^{-2}$ Sample Complexity in Single-Loop Actor-Critic,
+        \href{https://openreview.net/forum?id=ALtp3rFOx7}{NeurIPS MLxOR 2026}, \textbf{Ishaq~Hamza}, Zaiwei~Chen.
+        Undergrad publication, \href{https://arxiv.org/abs/2605.13639}{arXiv link}.
+\end{enumerate}
+
+% ======================= PRESENTATIONS =======================
+\section*{Presentations}
+\textit{To be updated.}
+
+% ======================= POSITIONS =======================
+\section*{Positions}
+\entry{Summer Research Intern}{May \textendash{} Aug 2025}
+\sub{Edwardson School of Industrial Engineering, Purdue University}{Advisor: Dr.~Zaiwei Chen}
+Project: \textit{Optimal Single-Timescale Actor-Critic Algorithm}
+\begin{itemize}
+  \item Proposed two variants of the actor-critic algorithm with single-timescale updates, and showed through
+        a tight analysis that they achieve the optimal sample complexity in the off-policy setting under
+        provably minimal assumptions.
+  \item The analysis combines Moreau envelopes, stochastic approximation, and Markov chain mixing.
+        This work became publication [1].
+\end{itemize}
+
+\gap
+\entry{Teaching Assistant, Advanced Convex Optimization}{Jan \textendash{} Apr 2025}
+\sub{Department of Electrical Engineering, IISc}{Instructor: Dr.~Kunal N. Chaudhury}
+A graduate course for PhD students, assisted during my third undergraduate year.
+\href{https://sites.google.com/site/kunalnchaudhury/Teaching/aco-2025}{[course webpage]}
+\begin{itemize}
+  \item Conducted tutorials, answered students' questions, and graded assignments.
+  \item The course covered rigorous convex analysis in extended-real settings and the operator-theoretic
+        treatment of optimization algorithms in both smooth and non-smooth settings, using set-valued
+        analysis for proximal algorithms.
+\end{itemize}
+
+% ======================= PROJECTS =======================
+\section*{Pre-PhD Projects}
+\entry{Extending Soft Actor-Critic to Multi-Agent RL}{Spring 2025}
+\sub{RL course project}{\href{https://github.com/IshaqHamza/Multi-agent-SAC}{[GitHub]}}
+\begin{itemize}
+  \item Surveyed entropy-regularized RL and Soft Actor-Critic algorithms in several settings.
+  \item Proposed and implemented a novel multi-agent extension of the algorithm, incorporating
+        cross-entropy regularization.
+  \item Extended the analysis to prove single-step policy evaluation and improvement theorems, and gave a
+        counterexample to global optimal convergence.
+  \item Proposed dynamic cross-entropy regularization to escape sub-optimal Nash equilibria and designed
+        experiments to validate it; the rest of the team implemented them, with positive results.
+\end{itemize}
+
+\gap
+\entry{Game-Theoretic Market-Making and Trading}{Spring 2025}
+\sub{Game Theory course project}{}
+\begin{itemize}
+  \item Surveyed 10+ papers on the modeling and equilibrium analysis of market makers and traders in
+        financial markets, and 5+ papers on information asymmetry and its impact on market making.
+  \item Formulated a novel generalized model of trading with priced information exchange.
+\end{itemize}
+
+\gap
+\entry{Automated Equity Research Analyst}{Fall 2024}
+\sub{Applied DS\&AI course project (team of 6)}{\href{https://github.com/Finance-Automation-Projects/finance-dashboard}{[GitHub]}}
+\begin{itemize}
+  \item Conceived the rating-generation mechanism and the project structure for the team.
+  \item Implemented a self-engineered variant of the multiplicative weights algorithm that rates stocks from
+        aspect-based sentiment analysis scores computed on financial news.
+  \item Tested it on both real and geometric-Brownian-motion-simulated prices, with high-noise expert ratings.
+\end{itemize}
+
+\gap
+\entry{Financial Network Modeling}{Fall 2024}
+\sub{Data Analytics course project (led a team of 5)}{\href{https://github.com/IshaqHamza/DA_Financial_networks}{[GitHub]}}
+\begin{itemize}
+  \item Studied generative models for analyzing community structure in graphs.
+  \item Modeled relationships between stock price movements with a hierarchical weighted stochastic block model.
+  \item Applied the same model to import--export data across 200+ countries to study trade relations,
+        obtaining the expected community structure.
+\end{itemize}
+
+\vfill
+\begin{flushright}\small\color{softgray}Last updated: October 2026\end{flushright}
+
+\end{document}

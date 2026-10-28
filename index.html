@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ishaq Hamza</title>
+<meta name="description" content="Ishaq Hamza, Operations Research PhD student at Purdue University working on reinforcement learning theory.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8E%B2%3C/text%3E%3C/svg%3E">
+<script>
+  // Apply a saved theme before first paint; otherwise follow the system setting.
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+    document.documentElement.classList.add('js');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* ------------------------------------------------------------------
+   Colour tokens (light by default, dark via system or toggle)
+   ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+  --bg: #FCFCFA;
+  --surface: #F3F4F1;
+  --text: #1E2227;
+  --muted: #59606A;
+  --faint: #868D97;
+  --rule: #E1E3E0;
+  --link: #1A57B0;
+  --link-hover: #0E3E85;
+  --disk: #E5EBF3;
+  --bubble: #FFFFFF;
+  --bubble-edge: #D8DCE1;
+  --shadow: rgba(18, 26, 38, .14);
+  --tip-bg: #1E2227;
+  --tip-text: #FCFCFA;
+  --page-edge: rgba(18, 26, 38, .12);
+
+  --sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121418; --surface: #1A1D22; --text: #E6E8EB; --muted: #A7AEB8; --faint: #7C838D;
+    --rule: #2A2E35; --link: #8AB4F8; --link-hover: #B6CFFB; --disk: #232933;
+    --bubble: #1C1F25; --bubble-edge: #353A44; --shadow: rgba(0, 0, 0, .55);
+    --tip-bg: #E6E8EB; --tip-text: #121418; --page-edge: rgba(0, 0, 0, .5);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121418; --surface: #1A1D22; --text: #E6E8EB; --muted: #A7AEB8; --faint: #7C838D;
+  --rule: #2A2E35; --link: #8AB4F8; --link-hover: #B6CFFB; --disk: #232933;
+  --bubble: #1C1F25; --bubble-edge: #353A44; --shadow: rgba(0, 0, 0, .55);
+  --tip-bg: #E6E8EB; --tip-text: #121418; --page-edge: rgba(0, 0, 0, .5);
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .2s, color .2s;
+}
+/* covers the phone status-bar strip above the sticky header */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 40;
+  background: var(--bg);
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .18em;
+}
+a:hover { color: var(--link-hover); text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 3px; }
+img { max-width: 100%; height: auto; }
+p { margin: 0 0 1em; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; color: var(--text); }
+h1 { font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.5rem); margin: 0 0 1.4rem; }
+h2 { font-size: 1.32rem; margin: 2.2rem 0 .7rem; }
+.muted { color: var(--muted); }
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.container {
+  width: 100%;
+  max-width: 66rem;
+  margin: 0 auto;
+  padding-left: clamp(1.15rem, 4vw, 2.5rem);
+  padding-right: clamp(1.15rem, 4vw, 2.5rem);
+}
+
+/* ------------------------------------------------------------------
+   Header
+   ------------------------------------------------------------------ */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 35;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  transition: background-color .2s;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: .5rem 2rem;
+  min-height: 3.75rem;
+  padding-top: .45rem;
+  padding-bottom: .45rem;
+}
+.brand {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--text);
+  text-decoration: none;
+  margin-right: auto;
+}
+.brand:hover { color: var(--text); text-decoration: none; }
+.nav ul { display: flex; gap: .25rem 1.6rem; margin: 0; padding: 0; list-style: none; }
+.nav a {
+  display: inline-block;
+  padding: .3rem 0;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 2px solid transparent;
+}
+.nav a:hover { color: var(--text); border-bottom-color: var(--rule); }
+.nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--link); }
+
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .15s, background-color .15s, transform .2s;
+}
+.theme-toggle:hover { color: var(--text); background: var(--surface); transform: rotate(-14deg); }
+.theme-toggle svg { width: 1.15rem; height: 1.15rem; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle[data-mode="dark"] .icon-sun { display: block; }
+.theme-toggle[data-mode="dark"] .icon-moon { display: none; }
+
+@media (max-width: 640px) {
+  .site-header { position: static; }
+  .header-inner { flex-wrap: wrap; column-gap: .75rem; }
+  .theme-toggle { order: 2; }
+  .nav { order: 3; flex-basis: 100%; }
+  .nav ul { justify-content: space-between; gap: .25rem 1rem; }
+}
+
+/* ------------------------------------------------------------------
+   Pages
+   ------------------------------------------------------------------ */
+main { flex: 1 0 auto; padding-top: clamp(1.8rem, 4.5vw, 3.2rem); padding-bottom: 3.5rem; }
+.js .page { display: none; }
+.js .page.active { display: block; }
+
+/* ---------- About ---------- */
+.about {
+  display: grid;
+  grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+.sidebar { position: relative; text-align: center; }
+.portrait-wrap { position: relative; }
+.portrait {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.portrait .disk {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--disk);
+  transition: transform .25s ease, background-color .2s;
+}
+.portrait img {
+  position: relative;
+  display: block;
+  width: 100%;
+  transition: transform .25s ease;
+}
+.portrait:hover img,
+.portrait:hover .disk { transform: translateY(-4px); }
+.photo-hint {
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+  min-height: 1.5em;
+  margin-top: .55rem;
+  font-size: .84rem;
+  line-height: 1.5;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity .2s, transform .2s;
+}
+.portrait:hover + .photo-hint,
+.portrait:focus-visible + .photo-hint { opacity: 1; transform: none; }
+@media (hover: none) {
+  .photo-hint { opacity: 1; transform: none; }
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  gap: 1.05rem;
+  margin: .55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.social a {
+  display: inline-grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  color: var(--muted);
+  transition: transform .18s ease, color .18s;
+}
+.social a:hover, .social a:focus-visible { transform: scale(1.3); color: var(--link); }
+.social svg { width: 1.4rem; height: 1.4rem; fill: currentColor; }
+
+.intro { max-width: 40rem; }
+.label { font-size: 1.22rem; margin: 0 0 .45rem; }
+.block + .block, .block + .aside, .aside + .block { margin-top: 1.9rem; }
+.name-word {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--faint);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+}
+.name-word:focus-visible { outline-offset: 2px; }
+
+/* The expandable aside */
+.aside {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: .7rem 1.05rem .55rem;
+  transition: background-color .2s;
+}
+.aside[data-open="false"] { cursor: zoom-in; }
+.aside-toggle {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: 600 1.08rem/1.3 var(--serif);
+  text-align: left;
+  cursor: pointer;
+}
+.aside-toggle .chev { width: .9rem; height: .9rem; color: var(--faint); transition: transform .25s; }
+.aside[data-open="true"] .aside-toggle .chev { transform: rotate(180deg); }
+.aside-toggle .aside-hint { margin-left: auto; font: 400 .78rem/1 var(--sans); color: var(--faint); }
+.aside-body {
+  margin-top: .35rem;
+  font-size: .72rem;
+  line-height: 1.55;
+  color: var(--muted);
+  transition: font-size .3s ease, color .3s ease;
+}
+.aside[data-open="true"] .aside-body { font-size: 1em; color: var(--text); }
+.aside-body p { margin-bottom: .45em; }
+
+.news { list-style: none; margin: 0; padding: 0; }
+.news li {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: .55rem 0;
+  border-top: 1px solid var(--rule);
+}
+.news li:first-child { border-top: 0; padding-top: .15rem; }
+.news time { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+@media (max-width: 799px) {
+  .about { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { max-width: 13rem; margin: 0 auto; }
+}
+@media (max-width: 520px) {
+  .news li { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .news time { font-size: .9em; }
+}
+
+/* ---------- Speech bubble (photo easter egg) ---------- */
+.bubble {
+  position: absolute;
+  z-index: 30;
+  top: .5rem;
+  left: calc(100% - 1.2rem);
+  width: min(22rem, calc(100vw - 2rem));
+  padding: .8rem 1rem .7rem;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bubble);
+  border: 1px solid var(--bubble-edge);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px -14px var(--shadow), 0 2px 6px -2px var(--shadow);
+}
+.bubble[hidden] { display: none !important; }
+.bubble::before {
+  content: "";
+  position: absolute;
+  top: 2.3rem;
+  left: -8px;
+  width: 14px;
+  height: 14px;
+  background: var(--bubble);
+  border-left: 1px solid var(--bubble-edge);
+  border-bottom: 1px solid var(--bubble-edge);
+  transform: rotate(45deg);
+}
+.bubble.show { animation: pop .22s ease-out; }
+@keyframes pop {
+  from { opacity: 0; transform: translateY(6px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+.bubble-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .3rem; }
+.bubble-kind { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.bubble-close {
+  border: 0; background: none; padding: 0 .2rem; cursor: pointer;
+  font: 400 1.3rem/1 var(--sans); color: var(--faint);
+}
+.bubble-close:hover { color: var(--text); }
+.bubble-text { margin: 0; }
+.bubble-by { margin: .25rem 0 0; text-align: right; font-style: italic; color: var(--muted); }
+.bubble-by:empty { display: none; }
+.bubble-meta { margin: .45rem 0 0; font-size: .74rem; color: var(--faint); text-align: right; }
+@media (max-width: 799px) {
+  .bubble { top: 58%; left: 50%; translate: -50% 0; }
+  .bubble::before { top: -8px; left: calc(50% - 7px); border-left: 1px solid var(--bubble-edge); border-bottom: 0; border-top: 1px solid var(--bubble-edge); }
+}
+
+/* Name-meaning tooltip that follows the pointer */
+.tip {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  padding: .3rem .6rem;
+  border-radius: 6px;
+  background: var(--tip-bg);
+  color: var(--tip-text);
+  font-size: .84rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px -6px var(--shadow);
+}
+.tip[hidden] { display: none; }
+.tip .k { opacity: .7; margin-right: .3em; }
+
+/* ---------- Publications ---------- */
+.pubs { list-style: none; margin: 0; padding: 0; }
+.pub { padding: .2rem 0 1.1rem; }
+.pub-head { display: flex; align-items: flex-end; gap: .4rem .8rem; }
+.pub-title { flex: 0 1 auto; font-weight: 600; font-size: 1.05em; line-height: 1.4; }
+.pub-leader { flex: 1 1 2rem; min-width: 2rem; margin-bottom: .42em; border-bottom: 2px dotted var(--rule); }
+.pub-links { flex: none; display: flex; gap: .45rem; }
+.pill {
+  display: inline-block;
+  padding: .08rem .62rem;
+  border: 1px solid var(--link);
+  border-radius: 999px;
+  font-size: .82rem;
+  font-weight: 600;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: background-color .15s, color .15s;
+}
+.pill:hover { background: var(--link); color: var(--bg); text-decoration: none; }
+.pub-authors, .pub-venue { margin: .15rem 0 0; }
+.pub-venue { color: var(--muted); font-style: italic; }
+@media (max-width: 640px) {
+  .pub-head { flex-wrap: wrap; }
+  .pub-title { flex-basis: 100%; }
+  .pub-leader { display: none; }
+}
+
+/* ---------- Teaching ---------- */
+.entry { max-width: 44rem; }
+.entry-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .2rem 1.5rem; }
+.entry-head h2 { margin: 0; font-size: 1.25rem; }
+.entry-date { color: var(--muted); white-space: nowrap; }
+.entry-meta { margin: .3rem 0 .9rem; color: var(--muted); }
+
+/* ---------- CV ---------- */
+.cv-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .9rem 1.5rem;
+  max-width: 52rem;
+  margin-bottom: 1.2rem;
+}
+.seg {
+  display: inline-flex;
+  padding: .2rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.seg button {
+  padding: .38rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 .95rem/1.2 var(--sans);
+  cursor: pointer;
+  transition: background-color .15s, color .15s;
+}
+.seg button:hover { color: var(--text); }
+.seg button[aria-selected="true"] { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px var(--shadow); }
+.cv-actions { display: flex; gap: 1.2rem; }
+.cv-actions[hidden] { display: none; }
+.cv-viewer { max-width: 52rem; min-height: 20rem; }
+.cv-page {
+  position: relative;
+  margin: 0 0 1.1rem;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--page-edge), 0 10px 26px -14px var(--shadow);
+}
+.cv-page canvas { display: block; width: 100%; height: auto; }
+.cv-page a.cv-link { position: absolute; display: block; border-radius: 2px; }
+.cv-page a.cv-link:hover { background: rgba(26, 87, 176, .12); }
+.cv-status { color: var(--muted); }
+.cv-iframe { width: 100%; height: min(88vh, 70rem); border: 1px solid var(--rule); background: #fff; }
+
+/* ------------------------------------------------------------------
+   Footer
+   ------------------------------------------------------------------ */
+.site-footer { border-top: 1px solid var(--rule); color: var(--faint); font-size: .9rem; }
+.site-footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .3rem 2rem; padding-top: 1rem; padding-bottom: 1.5rem; }
+.site-footer p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Icon sprite. Brand icons: Font Awesome Free 6.5.2 by @fontawesome, https://fontawesome.com, License: CC BY 4.0 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-linkedin" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></symbol>
+  <symbol id="i-scholar" viewBox="0 0 512 512"><path d="M390.9 298.5c0 0 0 .1 .1 .1c9.2 19.4 14.4 41.1 14.4 64C405.3 445.1 338.5 512 256 512s-149.3-66.9-149.3-149.3c0-22.9 5.2-44.6 14.4-64h0c1.7-3.6 3.6-7.2 5.6-10.7c4.4-7.6 9.4-14.7 15-21.3c27.4-32.6 68.5-53.3 114.4-53.3c33.6 0 64.6 11.1 89.6 29.9c9.1 6.9 17.4 14.7 24.8 23.5c5.6 6.6 10.6 13.8 15 21.3c2 3.4 3.8 7 5.5 10.5zm26.4-18.8c-30.1-58.4-91-98.4-161.3-98.4s-131.2 40-161.3 98.4L0 202.7 256 0 512 202.7l-94.7 77.1z"/></symbol>
+  <symbol id="i-researchgate" viewBox="0 0 448 512"><path d="M0 32v448h448V32H0zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1 .6-33.6 .8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7v7.3zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9zm-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></symbol>
+  <symbol id="i-email" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#about">Ishaq Hamza</a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><a href="#about" data-page="about" aria-current="page">About</a></li>
+        <li><a href="#publications" data-page="publications">Publications</a></li>
+        <li><a href="#teaching" data-page="teaching">Teaching</a></li>
+        <li><a href="#cv" data-page="cv">CV</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" data-mode="light">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ============================== ABOUT ============================== -->
+  <section class="page active" id="page-about" data-page="about" aria-labelledby="about-title">
+    <h1 id="about-title" class="visually-hidden">About</h1>
+    <div class="about">
+
+      <aside class="sidebar">
+        <div class="portrait-wrap">
+          <button class="portrait" id="photo" type="button" aria-describedby="photo-hint" aria-controls="bubble">
+            <span class="disk" aria-hidden="true"></span>
+            <picture>
+              <source srcset="assets/portrait.webp" type="image/webp">
+              <img src="assets/portrait.png" alt="Ishaq Hamza" width="720" height="975">
+            </picture>
+          </button>
+          <span class="photo-hint" id="photo-hint">Click for a glimpse of my philosophy/humor</span>
+
+          <div class="bubble" id="bubble" role="status" aria-live="polite" hidden>
+            <div class="bubble-head">
+              <span class="bubble-kind"></span>
+              <button class="bubble-close" type="button" aria-label="Close">&times;</button>
+            </div>
+            <p class="bubble-text"></p>
+            <p class="bubble-by"></p>
+            <p class="bubble-meta"></p>
+          </div>
+        </div>
+
+        <ul class="social">
+          <li><a href="https://www.linkedin.com/in/ishaqhamza" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg aria-hidden="true"><use href="#i-linkedin"/></svg></a></li>
+          <li><a href="https://scholar.google.com/citations?user=RCmlLGgAAAAJ&amp;hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg aria-hidden="true"><use href="#i-scholar"/></svg></a></li>
+          <!-- TODO: confirm this ResearchGate profile URL -->
+          <li><a href="https://www.researchgate.net/profile/Ishaq-Hamza" target="_blank" rel="noopener" aria-label="ResearchGate" title="ResearchGate"><svg aria-hidden="true"><use href="#i-researchgate"/></svg></a></li>
+          <li><a href="https://github.com/IshaqHamza" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg aria-hidden="true"><use href="#i-github"/></svg></a></li>
+          <li><a href="mailto:ihamza@purdue.edu" aria-label="Email: ihamza@purdue.edu" title="ihamza@purdue.edu"><svg aria-hidden="true"><use href="#i-email"/></svg></a></li>
+        </ul>
+      </aside>
+
+      <div class="intro">
+        <section class="block" aria-labelledby="bio-label">
+          <h2 class="label" id="bio-label">Bio</h2>
+          <p>I am <span class="name-word" tabindex="0" data-meaning="laughs">Ishaq</span> <span class="name-word" tabindex="0" data-meaning="brave">Hamza</span>, an Operations Research PhD student at the <a href="https://engineering.purdue.edu/IE" target="_blank" rel="noopener">Edwardson School of Industrial Engineering</a>, Purdue University, working with <a href="https://sites.google.com/view/zaiweichen/home" target="_blank" rel="noopener">Dr. Zaiwei Chen</a>.</p>
+        </section>
+
+        <section class="block" aria-labelledby="research-label">
+          <h2 class="label" id="research-label">Research</h2>
+          <p>I wish to achieve artificial general intelligence through the lens of reinforcement learning, with a focus on developing it as a tool beyond its classical applications, assumptions, and modeling choices. My research so far revolves around data-driven learning algorithms for decision-making in stochastic environments, especially ones that are practical to implement but whose theoretical behavior remains unclear because the analysis is mathematically challenging. I design and analyze such algorithms and prove performance guarantees for them under realistic assumptions, aiming for theory that gives practitioners real insight, rather than bounds that improve on paper but change nothing in practice. Where possible, I also aim for analysis techniques that carry over to similar settings across machine learning and decision-making.</p>
+        </section>
+
+        <section class="aside" id="aside" data-open="false" aria-labelledby="aside-toggle">
+          <button class="aside-toggle" id="aside-toggle" type="button" aria-expanded="false" aria-controls="aside-body">
+            Aside
+            <svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>
+            <span class="aside-hint">click to expand</span>
+          </button>
+          <div class="aside-body" id="aside-body">
+            <p>I really like to make sense of <span class="rnd" id="rnd">random</span> stuff. While my work is mostly theoretical, I like to explore applications where decision problems in nuanced, and perhaps noisy, stochastic environments show up naturally. I also love to discuss ideas in a way that blurs the boundary between formal discussion and casual talk.</p>
+          </div>
+        </section>
+
+        <section class="block" aria-labelledby="news-label">
+          <h2 class="label" id="news-label">News</h2>
+          <!-- Newest first: add new items at the top. -->
+          <ul class="news">
+            <li>
+              <time datetime="2026-09">Sep 2026</time>
+              <div>Our paper <a href="#publications">Achieving ε<sup>−2</sup> Sample Complexity in Single-Loop Actor-Critic</a>, with Dr. Zaiwei Chen, was accepted at the MLxOR workshop at NeurIPS 2026.</div>
+            </li>
+            <li>
+              <time datetime="2026-08">Aug 2026</time>
+              <div>Joined the <a href="https://engineering.purdue.edu/IE" target="_blank" rel="noopener">Edwardson School of Industrial Engineering</a> at Purdue as an Operations Research PhD student with <a href="https://sites.google.com/view/zaiweichen/home" target="_blank" rel="noopener">Dr. Zaiwei Chen</a>, supported by the four-year Dr. W. Dale and Mrs. Jeanne C. Compton Award.</div>
+            </li>
+            <li>
+              <time datetime="2026-06">Jun 2026</time>
+              <div>Graduated from the <a href="https://iisc.ac.in" target="_blank" rel="noopener">Indian Institute of Science</a> with a B.Tech in Mathematics and Computing, ranking 4th in the cohort.</div>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== PUBLICATIONS ============================== -->
+  <section class="page" id="page-publications" data-page="publications" aria-labelledby="pubs-title">
+    <h1 id="pubs-title">Publications</h1>
+
+    <h2>Papers</h2>
+    <!-- Newest first. Copy an <li class="pub"> block for each new paper. -->
+    <ol class="pubs">
+      <li class="pub">
+        <div class="pub-head">
+          <span class="pub-title">Achieving ε<sup>−2</sup> Sample Complexity in Single-Loop Actor-Critic</span>
+          <span class="pub-leader" aria-hidden="true"></span>
+          <span class="pub-links">
+            <a class="pill" href="https://openreview.net/forum?id=ALtp3rFOx7" target="_blank" rel="noopener" aria-label="MLxOR workshop version on OpenReview">MLxOR</a>
+            <a class="pill" href="https://arxiv.org/abs/2605.13639" target="_blank" rel="noopener" aria-label="arXiv version">arXiv</a>
+          </span>
+        </div>
+        <p class="pub-authors"><strong>Ishaq Hamza</strong>, <a href="https://sites.google.com/view/zaiweichen/home" target="_blank" rel="noopener">Zaiwei Chen</a></p>
+        <p class="pub-venue">MLxOR Workshop, NeurIPS 2026</p>
+      </li>
+    </ol>
+
+    <h2>Presentations</h2>
+    <!-- Add talks as a list here, newest first: title, venue, date, and a slides link. -->
+    <p class="muted">To be updated.</p>
+  </section>
+
+  <!-- ============================== TEACHING ============================== -->
+  <section class="page" id="page-teaching" data-page="teaching" aria-labelledby="teaching-title">
+    <h1 id="teaching-title">Teaching</h1>
+    <article class="entry">
+      <div class="entry-head">
+        <h2>Advanced Convex Optimization</h2>
+        <span class="entry-date">Jan–Apr 2025</span>
+      </div>
+      <p class="entry-meta">Teaching Assistant, Department of Electrical Engineering, Indian Institute of Science<br>
+        Instructor: Dr. Kunal N. Chaudhury (<a href="https://sites.google.com/site/kunalnchaudhury/Teaching/aco-2025" target="_blank" rel="noopener">course webpage</a>)</p>
+      <p>A graduate course taken by PhD students, which I assisted during the third year of my undergraduate studies. I conducted tutorials, answered students’ questions, and graded assignments. The course covered rigorous convex analysis in extended-real settings and the operator-theoretic treatment of optimization algorithms in both smooth and non-smooth settings, using set-valued analysis for proximal algorithms.</p>
+    </article>
+  </section>
+
+  <!-- ============================== CV ============================== -->
+  <section class="page" id="page-cv" data-page="cv" aria-labelledby="cv-title">
+    <h1 id="cv-title">CV</h1>
+    <div class="cv-bar">
+      <div class="seg" role="tablist" aria-label="CV version">
+        <button type="button" role="tab" id="tab-academic" data-cv="academic" aria-selected="true" aria-controls="cv-viewer">Academic CV</button>
+        <button type="button" role="tab" id="tab-industry" data-cv="industry" aria-selected="false" aria-controls="cv-viewer">Industry Résumé</button>
+      </div>
+      <div class="cv-actions" id="cv-actions">
+        <a id="cv-open" href="cv/Ishaq_Hamza_Academic_CV.pdf" target="_blank" rel="noopener">Open PDF</a>
+        <a id="cv-download" href="cv/Ishaq_Hamza_Academic_CV.pdf" download>Download</a>
+      </div>
+    </div>
+    <div class="cv-viewer" id="cv-viewer" role="tabpanel" aria-labelledby="tab-academic">
+      <p class="cv-status">Loading the CV…</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Ishaq Hamza</p>
+    <p>Last updated October 2026</p>
+  </div>
+</footer>
+
+<div class="tip" id="name-tip" role="tooltip" hidden></div>
+
+<script>
+/* ---- Site configuration (paths are relative to this file) ---- */
+var CV_FILES = {
+  academic: 'cv/Ishaq_Hamza_Academic_CV.pdf',
+  industry: 'cv/Ishaq_Hamza_Resume.pdf'
+};
+var PDFJS_SRC = 'vendor/pdf.min.js';
+var PDFJS_WORKER = 'vendor/pdf.worker.min.js';
+var CV_DATA = null;
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ================= Theme toggle ================= */
+  var toggle = document.getElementById('theme-toggle');
+  var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  function effectiveTheme() {
+    var t = root.getAttribute('data-theme');
+    return t || (darkQuery.matches ? 'dark' : 'light');
+  }
+  function syncToggle() {
+    var dark = effectiveTheme() === 'dark';
+    toggle.dataset.mode = dark ? 'dark' : 'light';
+    toggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    toggle.title = dark ? 'Light mode' : 'Dark mode';
+  }
+  toggle.addEventListener('click', function () {
+    var next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    syncToggle();
+  });
+  if (darkQuery.addEventListener) darkQuery.addEventListener('change', syncToggle);
+  syncToggle();
+
+  /* ================= Tabs (hash routing) ================= */
+  var titles = {
+    about: 'Ishaq Hamza',
+    publications: 'Publications | Ishaq Hamza',
+    teaching: 'Teaching | Ishaq Hamza',
+    cv: 'CV | Ishaq Hamza'
+  };
+  var aliases = { research: 'publications', resume: 'cv', philosophy: 'about' };
+  var pages = document.querySelectorAll('.page');
+  var tabs = document.querySelectorAll('.nav a[data-page]');
+
+  function route() {
+    var id = (location.hash || '#about').slice(1).toLowerCase();
+    var wantIndustry = id === 'resume';
+    if (aliases[id]) id = aliases[id];
+    if (!titles.hasOwnProperty(id)) id = 'about';
+    pages.forEach(function (p) { p.classList.toggle('active', p.dataset.page === id); });
+    tabs.forEach(function (a) {
+      if (a.dataset.page === id) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    document.title = titles[id];
+    closeBubble();
+    hideTip();
+    if (id === 'cv') showCV(wantIndustry ? 'industry' : cv.which);
+  }
+  window.addEventListener('hashchange', function () { route(); window.scrollTo(0, 0); });
+
+  /* ================= Name meanings ================= */
+  var tip = document.getElementById('name-tip');
+  var tipTimer = null;
+  function showTip(el, x, y) {
+    tip.textContent = '';
+    var k = document.createElement('span');
+    k.className = 'k';
+    k.textContent = 'meaning:';
+    tip.appendChild(k);
+    tip.appendChild(document.createTextNode(el.dataset.meaning));
+    tip.hidden = false;
+    placeTip(x, y);
+  }
+  function placeTip(x, y) {
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var nx = Math.min(x + 14, window.innerWidth - w - 8);
+    var ny = y + 18;
+    if (ny + h > window.innerHeight - 8) ny = y - h - 10;
+    tip.style.left = Math.max(8, nx) + 'px';
+    tip.style.top = ny + 'px';
+  }
+  function hideTip() { if (tip) tip.hidden = true; }
+  document.querySelectorAll('.name-word').forEach(function (el) {
+    el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') showTip(el, e.clientX, e.clientY); });
+    el.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' && !tip.hidden) placeTip(e.clientX, e.clientY); });
+    el.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hideTip(); });
+    el.addEventListener('pointerup', function (e) {
+      if (e.pointerType === 'mouse') return;
+      var r = el.getBoundingClientRect();
+      showTip(el, r.left, r.bottom - 10);
+      clearTimeout(tipTimer);
+      tipTimer = setTimeout(hideTip, 2500);
+    });
+    el.addEventListener('focus', function () {
+      var r = el.getBoundingClientRect();
+      showTip(el, r.left, r.bottom - 10);
+    });
+    el.addEventListener('blur', hideTip);
+  });
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  /* ================= The aside ================= */
+  var aside = document.getElementById('aside');
+  var asideToggle = document.getElementById('aside-toggle');
+  var asideHint = aside.querySelector('.aside-hint');
+  function setAside(open) {
+    aside.dataset.open = open ? 'true' : 'false';
+    asideToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    asideHint.textContent = open ? 'click to shrink' : 'click to expand';
+  }
+  asideToggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setAside(aside.dataset.open !== 'true');
+  });
+  aside.addEventListener('click', function () {
+    if (aside.dataset.open !== 'true') setAside(true);
+  });
+
+  /* ================= "random", scrambled ================= */
+  var rnd = document.getElementById('rnd');
+  var scrambling = false;
+  function scramble() {
+    if (scrambling || reduceMotion) return;
+    scrambling = true;
+    var word = 'random', frame = 0;
+    var timer = setInterval(function () {
+      frame++;
+      if (frame > 11) {
+        clearInterval(timer);
+        rnd.textContent = word;
+        scrambling = false;
+        return;
+      }
+      var a = word.split('');
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      rnd.textContent = a.join('');
+    }, 55);
+  }
+  rnd.addEventListener('mouseenter', scramble);
+  rnd.addEventListener('click', scramble);
+
+  /* ================= Photo easter egg ================= */
+  var quotes = [
+    'The ship named Theseus had all its parts changed, one at a time, over several years. Can it still be called the ship of Theseus? One may blame their miseries on choices and circumstances, but replacing events piece by piece, even in one’s own thoughts and coping mechanisms, reconstructs someone who arguably isn’t them.',
+    'Notions of right or wrong are evolving, and dictated by the powerful and victorious. One’s own analysis, as objective as it can get, is a prerequisite to an independent moral compass and conscience.',
+    'What we observe may be fact, but what we infer is perspective. What we hear isn’t truth, but opinion. One must consider potential biases in the source when framing their thoughts, but most importantly, the biases and conditioning of their own.',
+    { text: 'Unlike the stomach, the brain doesn’t alert you when it is empty.', by: 'African/Arabian proverb' },
+    'The most virtuous of victories is the one achieved over one’s own desires.',
+    'One may break a rock with a single blow; another may punch it until their fists shatter. “Strength” has several aspects.',
+    'Any advice, law or doctrine that ceases to work if everyone follows it is typically not morally sound.',
+    { text: 'We are drowning in information and starving for knowledge.', by: 'Rutherford D. Rogers' },
+    { text: 'Misfortune with wisdom is better than success built on ignorance.', by: 'Leo Tolstoy' },
+    'Thoughts and decisions belong more to one’s history, upbringing, and circumstance than to oneself. For every thought, decision or moral one claims to have ideated and analyzed, one ought to inspect its potential causes, validate it against stable doctrines, and carry out further introspective analyses.',
+    { text: 'Sometimes the people with the worst pasts create the best futures.', by: 'Umar ibn al-Khattab (R.A.)' },
+    'A misfortune is apparent only to those who have observed, analyzed and deduced from it. The state of not having seen through it is often a luxury. The dilemma of those who have observed is whether to make it apparent to those who have not, to establish reality, or to preserve their neighbor’s comfort.',
+    'A youth that distances itself from discussions and debates of challenging ideas is doomed. Intellectual laziness dooms a society before any adversary can. It leaves its victims vulnerable to propaganda and nihilism.',
+    'The most powerful, and hence dangerous, form of influence is the one that goes unnoticed. It shapes thoughts, moralities and norms without ever being attributed to the source.',
+    'Predictable and/or harmful actions, sold as choice, have the potential to cause a populace to enslave itself.',
+    'Unbounded growth of desires, even if accompanied by equivalent growth in prosperity, is an unstable system waiting to collapse. The ability to have “enough” is key to satisfaction, if at all one strives for it.',
+    'The certainty of a decision or an outcome is, to some, as troublesome as the anxious stochasticity that precedes it. But it is almost surely the better choice, as it allows for reflection and evaluation.',
+    'A natural talent is not merely a blessing, but a responsibility. More than a path to pursue, excellence ought to be a duty to fulfil.',
+    'One mustn’t speak behind another’s back that which they would not say in their presence. Confrontation signifies concern, and a lack of the same is potential evidence of malintent.',
+    'Correlation in “personality”/identity or character is often an indicator of conditioning, or typicality. One must analyze their behaviors to validate a perceived independence of thought.',
+    'Objectivity is often a function of perception. Often, it is merely subjectivity agreed upon by a statistical majority. It is often beyond us to understand and dictate.',
+    { text: 'A system that separates its researchers from its engineers will have its crafting and execution done by routine, mundane and functionary minds, and its innovation driven by detached, unrealistic and ungrounded ones.', note: 'Inspired by a similar quote about warriors and scholars, often attributed to Thucydides.' },
+    'One’s intellect is doomed to stagnate in environments identical to their history. Detachment is a prerequisite to nontrivial development, in both thought and resilience.',
+    'Experience of hardship is a blessing in its own right. A circumstance that disturbs and challenges one often teaches more than what is needed to triumph over it: a first-hand discovery of perspective and analysis. Perhaps a mercy much higher than stability itself.'
+  ];
+  var jokes = [
+    'A statistician drowned while crossing a river that was, on average, three feet deep.',
+    'The Bellman equation says that to act optimally today, assume you will act optimally tomorrow. Graduate students call this procrastination with a fixed point.',
+    'Value iteration converges because the Bellman operator is a γ-contraction. My to-do list, unfortunately, is an expansion.',
+    'Why did the Q-function go to therapy? It kept overestimating itself. Its therapist recommended a second opinion: Double Q-learning.',
+    'In single-timescale actor-critic, the actor and the critic update at the same pace. In any other context, this is called a healthy relationship.',
+    'Off-policy learning: learning from other people’s mistakes. Statistically the most sample-efficient way to live.',
+    'Exploration versus exploitation is why I tried every item on the dining-hall menu exactly once, and have ordered the same thing ever since.',
+    'Sample complexity of convincing my relatives that reinforcement learning is not dog training: O(ε⁻²) conversations, with a very large constant.',
+    'The reward was sparse, the horizon was infinite, and the discount factor was 0.99. In other words, a PhD.',
+    'A reviewer promised to “raise the score after the rebuttal.” This is precisely why future rewards are discounted.',
+    'Reward hacking: my agent was rewarded for not losing at chess, so it learned never to start the game.',
+    'Policy gradients give excellent directions: “Uphill. Roughly. Ask me again and I’ll tell you something else.”',
+    'The deadly triad of RL: function approximation, bootstrapping, and off-policy data. The deadly triad of a PhD: coffee, deadlines, and “just one more experiment.”',
+    'Markov chains don’t hold grudges. They don’t care where you’ve been, only where you are.',
+    'Someone asked what got me into Markov chains. I told them it doesn’t matter; only the current state does.',
+    'My life is a martingale: on average, tomorrow will be exactly as good as today. Technically, a fair game.',
+    'Stochastic gradient descent never gets anxious. It knows it will converge, in expectation.',
+    'An ε-greedy agent walks into a bar. With probability 1 − ε it orders the usual. With probability ε it ends up in the kitchen.',
+    'A p-value of 0.06 walks into a bar. “Sorry,” says the bartender, “we only serve significant results.” It goes home and collects three more data points.',
+    'There are three kinds of statisticians: those who can count, and those who can’t.',
+    'Statistics means never having to say you’re certain.',
+    'Monte Carlo methods: when the integral is too hard, throw ten thousand darts and report the answer with confidence.',
+    '“Almost surely” is mathematician for “I’d bet my life on it, except on a set of measure zero.”',
+    'The law of large numbers assures me that if I submit enough papers, my acceptance rate will converge. It did not say to what.',
+    'Frequentists and Bayesians agree on everything, in the limit. Unfortunately, nobody lives there.',
+    'Asymptotic guarantees are lovely. Unfortunately, my funding is finite-sample.',
+    'My result holds with probability at least 1 − δ, where δ is the probability that I find a bug in the appendix.',
+    'Correlation does not imply causation. It does, however, make an excellent first draft of a press release.',
+    'Why don’t RL agents ever get lost? Every state comes with a policy. Whether it’s a good one is a separate paper.',
+    'The central limit theorem: average enough of anything and it starts to look normal. Even graduate school, eventually.',
+    'The probability that a typo survives proofreading is proportional to how important the reader is.',
+    { text: 'A Bayesian is one who, vaguely expecting a horse and catching a glimpse of a donkey, strongly believes he has seen a mule.', by: 'attributed to Stephen Senn' }
+  ];
+
+  var pool = [];
+  quotes.forEach(function (q) {
+    if (typeof q === 'string') pool.push({ kind: 'A thought', text: q, by: '' });
+    else pool.push({
+      kind: q.by ? 'Borrowed wisdom' : 'A thought',
+      text: q.text,
+      by: q.by ? '\u2014\u2009' + q.by : q.note
+    });
+  });
+  jokes.forEach(function (j) {
+    pool.push(typeof j === 'string'
+      ? { kind: 'A joke', text: j, by: '' }
+      : { kind: 'A joke', text: j.text, by: '\u2014\u2009' + j.by });
+  });
+
+  var specials = {
+    10: 'Ten clicks already. Your exploration is admirable; consider decaying ε.',
+    30: 'Thirty clicks. At this point you are not exploring. You are exploiting me.'
+  };
+  var censusNote = 'You have now sampled the entire population. That is no longer statistics; it is a census. Reshuffling.';
+  var bag = [], drawn = 0, rounds = 0, clicks = 0, last = null;
+
+  function refill() {
+    bag = pool.slice();
+    for (var i = bag.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = bag[i]; bag[i] = bag[j]; bag[j] = t;
+    }
+    if (bag.length > 1 && bag[bag.length - 1] === last) {
+      var tmp = bag[0]; bag[0] = bag[bag.length - 1]; bag[bag.length - 1] = tmp;
+    }
+    drawn = 0;
+    rounds++;
+  }
+  function nextNote() {
+    clicks++;
+    if (specials[clicks]) return { kind: 'A notice', text: specials[clicks], by: '', meta: 'click ' + clicks };
+    if (!bag.length) {
+      var exhausted = rounds > 0;
+      refill();
+      if (exhausted) return { kind: 'A notice', text: censusNote, by: '', meta: 'round ' + rounds + ' begins' };
+    }
+    var item = bag.pop();
+    last = item;
+    drawn++;
+    return { kind: item.kind, text: item.text, by: item.by, meta: 'draw ' + drawn + ' of ' + pool.length + ', without replacement' };
+  }
+
+  var photo = document.getElementById('photo');
+  var hint = document.getElementById('photo-hint');
+  var bubble = document.getElementById('bubble');
+  var bKind = bubble.querySelector('.bubble-kind');
+  var bText = bubble.querySelector('.bubble-text');
+  var bBy = bubble.querySelector('.bubble-by');
+  var bMeta = bubble.querySelector('.bubble-meta');
+  if (window.matchMedia('(hover: none)').matches) hint.textContent = 'Tap for a glimpse of my philosophy/humor';
+
+  function openBubble() {
+    var n = nextNote();
+    bKind.textContent = n.kind;
+    bText.textContent = n.text;
+    bBy.textContent = n.by;
+    bMeta.textContent = n.meta;
+    bubble.hidden = false;
+    bubble.classList.remove('show');
+    void bubble.offsetWidth; // restart the entrance animation
+    bubble.classList.add('show');
+  }
+  function closeBubble() { if (bubble) bubble.hidden = true; }
+  photo.addEventListener('click', openBubble);
+  bubble.querySelector('.bubble-close').addEventListener('click', function () { closeBubble(); photo.focus(); });
+  document.addEventListener('click', function (e) {
+    if (bubble.hidden || bubble.contains(e.target) || photo.contains(e.target)) return;
+    closeBubble();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeBubble(); hideTip(); }
+  });
+
+  /* ================= CV viewer (PDF.js) ================= */
+  var cv = { which: 'academic', docs: {}, token: 0, renderedKey: '', lib: null, loader: null };
+  var viewer = document.getElementById('cv-viewer');
+  var segButtons = document.querySelectorAll('.seg button');
+  var openLink = document.getElementById('cv-open');
+  var dlLink = document.getElementById('cv-download');
+  if (CV_DATA) document.getElementById('cv-actions').hidden = true;
+
+  function loadPdfjs() {
+    if (cv.lib) return Promise.resolve(cv.lib);
+    if (cv.loader) return cv.loader;
+    cv.loader = new Promise(function (resolve, reject) {
+      if (window.pdfjsLib) return resolve(window.pdfjsLib);
+      var s = document.createElement('script');
+      s.src = PDFJS_SRC;
+      s.onload = function () { window.pdfjsLib ? resolve(window.pdfjsLib) : reject(new Error('PDF.js did not load')); };
+      s.onerror = function () { reject(new Error('PDF.js did not load')); };
+      document.head.appendChild(s);
+    }).then(function (lib) {
+      lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+      cv.lib = lib;
+      return lib;
+    });
+    cv.loader.catch(function () { cv.loader = null; });
+    return cv.loader;
+  }
+  function base64ToBytes(b64) {
+    var bin = atob(b64), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return bytes;
+  }
+  function getDoc(which) {
+    if (!cv.docs[which]) {
+      var params = CV_DATA ? { data: base64ToBytes(CV_DATA[which]) } : { url: CV_FILES[which] };
+      params.isEvalSupported = false;
+      cv.docs[which] = cv.lib.getDocument(params).promise;
+      cv.docs[which].catch(function () { delete cv.docs[which]; });
+    }
+    return cv.docs[which];
+  }
+
+  function showCV(which) {
+    cv.which = which;
+    segButtons.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.cv === which ? 'true' : 'false'); });
+    viewer.setAttribute('aria-labelledby', 'tab-' + which);
+    openLink.href = CV_FILES[which];
+    dlLink.href = CV_FILES[which];
+    renderCV(false);
+  }
+
+  function renderCV(force) {
+    var width = viewer.clientWidth;
+    if (!width) return;
+    var key = cv.which + ':' + width;
+    if (!force && cv.renderedKey.split(':')[0] === cv.which &&
+        Math.abs(+cv.renderedKey.split(':')[1] - width) < 0.15 * width) return;
+    var token = ++cv.token;
+    var which = cv.which;
+    viewer.setAttribute('aria-busy', 'true');
+    loadPdfjs().then(function () { return getDoc(which); }).then(function (doc) {
+      if (token !== cv.token) return;
+      var holder = document.createDocumentFragment();
+      var shells = [];
+      for (var i = 1; i <= doc.numPages; i++) {
+        var shell = document.createElement('div');
+        shell.className = 'cv-page';
+        shell.setAttribute('role', 'img');
+        shell.setAttribute('aria-label', (which === 'academic' ? 'Academic CV' : 'Industry résumé') + ', page ' + i + ' of ' + doc.numPages);
+        holder.appendChild(shell);
+        shells.push(shell);
+      }
+      viewer.textContent = '';
+      viewer.appendChild(holder);
+      var chain = Promise.resolve();
+      shells.forEach(function (shell, idx) {
+        chain = chain.then(function () {
+          if (token !== cv.token) return;
+          return doc.getPage(idx + 1).then(function (page) { return drawPage(page, shell, width, token); });
+        });
+      });
+      return chain.then(function () {
+        if (token === cv.token) { cv.renderedKey = key; viewer.removeAttribute('aria-busy'); }
+      });
+    }).catch(function (err) {
+      if (token !== cv.token) return;
+      console.error(err);
+      viewer.removeAttribute('aria-busy');
+      cv.renderedKey = '';
+      viewer.textContent = '';
+      if (CV_DATA) {
+        var p = document.createElement('p');
+        p.className = 'cv-status';
+        p.textContent = 'The CV viewer could not load here.';
+        viewer.appendChild(p);
+      } else {
+        var f = document.createElement('iframe');
+        f.className = 'cv-iframe';
+        f.src = CV_FILES[which];
+        f.title = 'CV (PDF)';
+        viewer.appendChild(f);
+      }
+    });
+  }
+
+  function drawPage(page, shell, width, token) {
+    var base = page.getViewport({ scale: 1 });
+    var scale = width / base.width;
+    var viewport = page.getViewport({ scale: scale });
+    var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    var canvas = document.createElement('canvas');
+    canvas.width = Math.floor(viewport.width * dpr);
+    canvas.height = Math.floor(viewport.height * dpr);
+    shell.style.aspectRatio = base.width + ' / ' + base.height;
+    shell.appendChild(canvas);
+    return page.render({
+      canvasContext: canvas.getContext('2d'),
+      viewport: viewport,
+      transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null
+    }).promise.then(function () {
+      if (token !== cv.token) return;
+      return page.getAnnotations().then(function (annots) {
+        var v = page.view, W = v[2] - v[0], H = v[3] - v[1];
+        annots.forEach(function (a) {
+          if (a.subtype !== 'Link' || !a.url) return;
+          var x1 = Math.min(a.rect[0], a.rect[2]), x2 = Math.max(a.rect[0], a.rect[2]);
+          var y1 = Math.min(a.rect[1], a.rect[3]), y2 = Math.max(a.rect[1], a.rect[3]);
+          var link = document.createElement('a');
+          link.className = 'cv-link';
+          link.href = a.url;
+          if (!/^mailto:/i.test(a.url)) { link.target = '_blank'; link.rel = 'noopener'; }
+          link.setAttribute('aria-label', a.url.replace(/^mailto:/i, ''));
+          link.style.left = ((x1 - v[0]) / W * 100) + '%';
+          link.style.top = ((v[3] - y2) / H * 100) + '%';
+          link.style.width = ((x2 - x1) / W * 100) + '%';
+          link.style.height = ((y2 - y1) / H * 100) + '%';
+          shell.appendChild(link);
+        });
+      });
+    });
+  }
+
+  segButtons.forEach(function (b) {
+    b.addEventListener('click', function () { showCV(b.dataset.cv); });
+  });
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (document.getElementById('page-cv').classList.contains('active')) renderCV(false);
+    }, 200);
+  });
+
+  route();
+})();
+</script>
+</body>
+</html>
